@@ -89,6 +89,9 @@ nlp = en_grammar_checker.load()
 streamlit run streamlit_app.py
 `
 
+![images](./grammar_checker/images/demo.gif)
+
+
 ### SpanCategorizer-based rendering
 ![span_cat](./grammar_checker/images/span_cat.png)
 
