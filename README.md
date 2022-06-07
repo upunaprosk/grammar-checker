@@ -88,9 +88,7 @@ nlp = en_grammar_checker.load()
 `
 streamlit run streamlit_app.py
 `
-### NER-based non-overlapping rendering
 
-![ner](./grammar_checker/images/ner.png)
 ### SpanCategorizer-based rendering
 ![span_cat](./grammar_checker/images/span_cat.png)
 
