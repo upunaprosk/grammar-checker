@@ -89,11 +89,11 @@ nlp = en_grammar_checker.load()
 streamlit run streamlit_app.py
 `
 
-![images](./grammar_checker/images/demo.gif)
+![images](./images/demo.gif)
 
 
 ### SpanCategorizer-based rendering
-![span_cat](./grammar_checker/images/span_cat.png)
+![span_cat](./images/span_cat.png)
 
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
