@@ -1,5 +1,5 @@
 streamlit>=0.86.0
-spacy>=3.0.0,<4.0.0
-spacy-transformers>=1.0.2
+spacy>=3.0.5,<4.0.0
+spacy-transformers>=1.1.2
 en-grammar-checker @ https://huggingface.co/iproskurina/en_grammar_checker/resolve/main/en_grammar_checker-any-py3-none-any.whl
 pandas
