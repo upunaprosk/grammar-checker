@@ -1,0 +1,67 @@
+title: "Essay Grammar Checker"
+description: >
+  Essay Grammar Checker trained on Russian Error-Annotated Learner English Corpus (REALEC).
+
+vars:
+  config: "default"
+  lang: "en"
+  corpus: "realec"
+  train_name: "train"
+  dev_name: "dev"
+  package_name: "grammar_checker"
+  package_version: "1.0.0"
+  errors: grammar_major grammar_minor vocabulary spelling punctuation articles
+  gpu: 0
+
+directories: ["assets", "metrics", "configs", "training", "packages"]
+
+assets:
+  - dest: 'assets/${vars.corpus}/data_realec.tar.bz2'
+    url: 'https://www.dropbox.com/s/sde5lfe56m348u8/data_realec.tar.bz2?dl=1'
+workflows:
+  all:
+    - preprocess
+    - generate_configs
+    - train_pipelines
+    - evaluate_pipelines
+    - assemble_pipelines
+    - package
+commands:
+  - name: preprocess
+    help: "Convert data to spaCy format required for SpanCategorizer"
+    script:
+      - tar xvf assets/${vars.corpus}/data_realec.tar.bz2 -C assets/${vars.corpus}
+      - python scripts/spans_to_dict.py assets/${vars.corpus} ${vars.lang}
+      - rm assets/${vars.corpus}/data_realec.tar.bz2
+      - mv -v assets/${vars.corpus} ./
+    deps: 
+      - "assets/${vars.corpus}/data_realec.tar.bz2"
+  - name: generate_configs
+    help: "Config class weights update"
+    script:
+      - "python scripts/generate_configs.py configs/default.cfg assets"
+    deps:
+      - "${vars.corpus}"   
+      - "configs/default.cfg"
+  - name: train_pipelines
+    help: "Training"
+    script:
+      - sh scripts/train.sh ${vars.errors}
+  - name: evaluate_pipelines
+    help: "Evaluate pipelines"
+    script:
+      - sh scripts/evaluate.sh ${vars.errors}
+  - name: assemble_pipelines
+    help: "Model Assembly"
+    script:
+      - sh scripts/save_configs.sh ${vars.errors}
+      - "python scripts/assemble_pipelines.py grammar_checker_nlp"
+  - name: package
+    help: "Package an assembled model"
+    script:
+      - "python -m spacy package grammar_checker_nlp packages --name ${vars.package_name} --version ${vars.package_version} --code scripts/custom_factories.py --force --build wheel"
+    deps:
+      - "grammar_checker_nlp"
+
+    
+
