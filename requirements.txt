@@ -1,4 +1,6 @@
 streamlit>=0.86.0
 spacy>=3.0.5,<4.0.0
 en-grammar-checker @ https://huggingface.co/iproskurina/en_grammar_checker/resolve/main/en_grammar_checker-any-py3-none-any.whl
+en-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.3.0/en_core_web_trf-3.3.0-py3-none-a
+ny.whl
 pandas
