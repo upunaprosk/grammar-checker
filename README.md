@@ -62,7 +62,7 @@ The data used for training can be extracted from the corpus using the following 
 
 # Performance
 
-[Scores](./grammar_checker/images/f1_chart.png)
+[Scores](./images/f1_chart.png)
 
 | Metric | Scores | 
 | --- | --- | 
