@@ -1,6 +1,6 @@
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS START (do not remove) -->
 
-# Essay Grammar Checker
+# :black_nib: Essay Grammar Checker
 
 Essay Grammar Checker trained on Russian Error-Annotated Learner English Corpus using SpaCy.
 
@@ -65,7 +65,7 @@ The data used for training can be extracted from the corpus using the following 
 
 | Metric | Scores | 
 | --- | --- | 
-| **f1-scores** | `punctuation`:0.760, `spelling`:0.910, `capitalisation`:0.871, `articles`:0.824, `lex_part_choice`: 0.14, `lex_item_choice`: 0.644, `Category_confusion`: 0.640, `Formational_affixes`: 0.688, `Verb_pattern`:0.373, `Noun_number`:0.897, `Word_order`:0.345, `Numerals`:0.650, `Determiners`:0.044, `Agreement_errors`:0.830, `Prepositions`:0.694, `Redundant_comp`:0.452, `Tense_choice`:0.794  |
+| **f1-scores** | `punctuation`:0.779, `spelling`:0.939, `capitalisation`:0.902, `articles`:0.852, `lex_part_choice`: 0.235, `lex_item_choice`: 0.685, `Category_confusion`: 0.705, `Formational_affixes`: 0.742, `Verb_pattern`:0.629, `Noun_number`:0.920, `Word_order`:0.527, `Numerals`:0.736, `Determiners`:0.044, `Agreement_errors`:0.835, `Prepositions`:0.710, `Redundant_comp`:0.495, `Tense_choice`:0.825 |
 
 # Usage
 ## Install
