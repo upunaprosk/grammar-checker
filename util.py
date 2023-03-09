@@ -10,7 +10,7 @@ def get_html(html: str):
     return WRAPPER.format(html)
 
 
-@st.cache(allow_output_mutation=True, suppress_st_warning=True)
+@st.cache_resource
 def load_model(name: str) -> spacy.language.Language:
     """Load a spaCy model."""
     return spacy.load(name)
