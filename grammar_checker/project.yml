@@ -9,7 +9,7 @@ vars:
   train_name: "train"
   dev_name: "dev"
   package_name: "grammar_checker"
-  package_version: "1.0.0"
+  package_version: "1.0.2"
   errors: grammar_major grammar_minor vocabulary spelling punctuation articles
   gpu: 0
 
