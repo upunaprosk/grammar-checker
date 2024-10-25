@@ -6,6 +6,8 @@ from spacy.tokens import DocBin
 from tqdm import tqdm
 from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
+from spacy.tokens import SpanGroup
+
 
 def main(loc: Path, lang: str):
     """
@@ -31,7 +33,8 @@ def main(loc: Path, lang: str):
                 for ent in ents:
                     span = doc.char_span(ent.start, ent.end, label=span_key)
                     spans.append(span)
-                doc.spans["sc"] = spans
+                group = SpanGroup(doc, name="sc", spans=spans)
+                doc.spans["sc"] = group
                 type_ = doc.ents[0].label_
                 y_labels.extend([type_] * len(list(doc.ents)))
             class_weights_e = compute_class_weight('balanced', classes=np.unique(y_labels), y=np.array(y_labels))
