@@ -26,7 +26,12 @@ def main(loc: Path, lang: str):
             docbin = DocBin().from_disk(f)
             docs = list(docbin.get_docs(nlp.vocab))[:100]# TODO: use all docs in final v
             for doc in docs:
-                doc.spans[span_key] = list(doc.ents)
+                ents = list(doc.ents)
+                spans = []
+                for ent in ents:
+                    span = doc.char_span(ent.start, ent.end, label=span_key)
+                    spans.append(span)
+                doc.spans["sc"] = spans
                 type_ = doc.ents[0].label_
                 y_labels.extend([type_] * len(list(doc.ents)))
             class_weights_e = compute_class_weight('balanced', classes=np.unique(y_labels), y=np.array(y_labels))
