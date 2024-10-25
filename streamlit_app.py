@@ -10,5 +10,3 @@ All things considered, it is clear that it is a mistake for parents to think tha
 """
 
 visualize(spacy_model, default_text)
-
-
