@@ -7,7 +7,7 @@ from tqdm import tqdm
 from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 from spacy.tokens import SpanGroup
-
+from spacy.tokens import Doc, Span
 
 def main(loc: Path, lang: str):
     """
@@ -31,8 +31,7 @@ def main(loc: Path, lang: str):
                 ents = list(doc.ents)
                 spans = []
                 for ent in ents:
-                    span = doc.char_span(ent.start, ent.end, label=span_key)
-                    spans.append(span)
+                    spans.append(Span(ent.start, ent.end, label=span_key))
                 group = SpanGroup(doc, name="sc", spans=spans)
                 doc.spans["sc"] = group
                 type_ = doc.ents[0].label_
