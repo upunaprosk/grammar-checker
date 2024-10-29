@@ -9,7 +9,7 @@ from util import load_model, get_html, \
     DEFAULT_LABEL_COLORS, TPL_SPAN, TPL_SPAN_START, TPL_SPAN_SLICE, SDDESCRIPTION
 
 ATTRS = ["text", "label_", "start", "end", "start_char", "end_char"]
-FOOTER = """<span style="font-size: 0.75em">&hearts; Built with [`spacy-streamlit`](https://github.com/explosion/spacy-streamlit)</span>"""
+FOOTER = """<span style="font-size: 1.75em">&hearts; Built with [`spacy-streamlit`](https://github.com/explosion/spacy-streamlit)</span>"""
 
 
 def visualize(
