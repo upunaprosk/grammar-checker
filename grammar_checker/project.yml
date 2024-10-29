@@ -16,8 +16,7 @@ vars:
 directories: ["assets", "metrics", "configs", "training", "packages"]
 
 assets:
-  - dest: 'assets/${vars.corpus}/data_realec.tar.bz2'
-    url: 'https://www.dropbox.com/s/sde5lfe56m348u8/data_realec.tar.bz2?dl=1'
+  - dest: 'assets/${vars.corpus}/train.spacy'
 workflows:
   all:
     - preprocess
@@ -30,12 +29,10 @@ commands:
   - name: preprocess
     help: "Convert data to spaCy format required for SpanCategorizer"
     script:
-      - tar xvf assets/${vars.corpus}/data_realec.tar.bz2 -C assets/${vars.corpus}
       - python scripts/spans_to_dict.py assets/${vars.corpus} ${vars.lang}
-      - rm assets/${vars.corpus}/data_realec.tar.bz2
       - mv -v assets/${vars.corpus} ./
     deps: 
-      - "assets/${vars.corpus}/data_realec.tar.bz2"
+      - "assets/${vars.corpus}/train.spacy"
   - name: generate_configs
     help: "Config class weights update"
     script:

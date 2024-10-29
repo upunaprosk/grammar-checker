@@ -7,7 +7,7 @@ from tqdm import tqdm
 from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 from spacy.tokens import SpanGroup
-from spacy.tokens import Doc, Span
+
 
 def main(loc: Path, lang: str):
     """
@@ -16,35 +16,27 @@ def main(loc: Path, lang: str):
     """
     nlp = spacy.blank(lang)
     class_weights = dict()
-    labels_list = []
     for subset in ['train', 'dev']:
         fetched_files = list(Path(loc).rglob(f'{subset}.*.spacy'))
-        all_subset_docs= []
         for f in tqdm(fetched_files):
             y_labels = []
             span_key = "_".join(f.stem.split("_")[:-1])
-            if subset == 'train':
-                labels_list.append(span_key)
             docbin = DocBin().from_disk(f)
             docs = list(docbin.get_docs(nlp.vocab))[:100]# TODO: use all docs in final v
             for doc in docs:
-                ents = list(doc.ents)
-                spans = []
-                for ent in ents:
-                    spans.append(Span(ent.start, ent.end, label=span_key))
+                for span in doc.spans["sc"]:
+                    type_ = span.label_
+                    y_labels.extend([type_] * len(list(doc.spans)))
                 group = SpanGroup(doc, name="sc", spans=spans)
                 doc.spans["sc"] = group
-                type_ = doc.ents[0].label_
-                y_labels.extend([type_] * len(list(doc.ents)))
-            class_weights_e = compute_class_weight('balanced', classes=np.unique(y_labels), y=np.array(y_labels))
-            class_weights[span_key] = dict(zip(np.unique(y_labels).tolist(), class_weights_e.tolist()))
-            all_subset_docs.extend(docs)
-        subset_filename=f'{subset}.spacy'
-        DocBin(docs=all_subset_docs).to_disk(Path(loc) / subset_filename)
-    with open(str(Path(loc).parent) + '/class_weights.json', 'w', encoding='utf-8') as f:
-        json.dump(class_weights, f, ensure_ascii=False, indent=4)
-    with open(str(Path(loc).parent) + '/spancat.json', 'w') as json_file:
-        json.dump(labels_list, json_file, indent=2)
+            if subset == 'train':
+                labels_list = np.unique(y_labels).tolist()
+                class_weights_e = compute_class_weight('balanced', classes=np.unique(y_labels), y=np.array(y_labels))
+                class_weights[span_key] = dict(zip(labels_list, class_weights_e.tolist()))
+                with open(str(Path(loc).parent) + '/class_weights.json', 'w', encoding='utf-8') as f:
+                    json.dump(class_weights, f, ensure_ascii=False, indent=4)
+                with open(str(Path(loc).parent) + '/spancat.json', 'w') as json_file:
+                    json.dump(labels_list, json_file, indent=2)
 
 if __name__ == "__main__":
     typer.run(main)
