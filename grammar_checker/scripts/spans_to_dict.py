@@ -11,32 +11,35 @@ from spacy.tokens import SpanGroup
 
 def main(loc: Path, lang: str):
     """
-    Set the NER data into the doc.spans.
-    (The SpanCategorizer component uses the doc.spans)
+    Process NER data from the train.spacy file, compute class weights,
+    and save labels and class weights for pipeline training with SpanCategorizer.
     """
     nlp = spacy.blank(lang)
-    class_weights = dict()
-    for subset in ['train', 'dev']:
-        fetched_files = list(Path(loc).rglob(f'{subset}.*.spacy'))
-        for f in tqdm(fetched_files):
-            y_labels = []
-            span_key = "_".join(f.stem.split("_")[:-1])
-            docbin = DocBin().from_disk(f)
-            docs = list(docbin.get_docs(nlp.vocab))[:100]# TODO: use all docs in final v
-            for doc in docs:
-                for span in doc.spans["sc"]:
-                    type_ = span.label_
-                    y_labels.extend([type_] * len(list(doc.spans)))
-                group = SpanGroup(doc, name="sc", spans=spans)
-                doc.spans["sc"] = group
-            if subset == 'train':
-                labels_list = np.unique(y_labels).tolist()
-                class_weights_e = compute_class_weight('balanced', classes=np.unique(y_labels), y=np.array(y_labels))
-                class_weights[span_key] = dict(zip(labels_list, class_weights_e.tolist()))
-                with open(str(Path(loc).parent) + '/class_weights.json', 'w', encoding='utf-8') as f:
-                    json.dump(class_weights, f, ensure_ascii=False, indent=4)
-                with open(str(Path(loc).parent) + '/spancat.json', 'w') as json_file:
-                    json.dump(labels_list, json_file, indent=2)
+    train_file = loc / "train.spacy"
+    y_labels = []
+
+    if train_file.exists():
+        docbin = DocBin().from_disk(train_file)
+        docs = list(docbin.get_docs(nlp.vocab))
+
+        for doc in tqdm(docs):
+            for span in doc.spans["error"]:
+                y_labels.append(span.label_)
+
+        labels_list = np.unique(y_labels)
+        class_weights = dict(
+            zip(labels_list, compute_class_weight('balanced', classes=labels_list, y=np.array(y_labels)).tolist())
+        )
+        labels_list = list(labels_list)
+
+        with open(loc / 'class_weights.json', 'w', encoding='utf-8') as f:
+            json.dump(class_weights, f, ensure_ascii=False, indent=4)
+        with open(loc / 'spancat.json', 'w', encoding='utf-8') as f:
+            json.dump(labels_list, f, indent=2)
+        print("Labels and class weights saved successfully.")
+    else:
+        print(f"File {train_file} not found.")
+
 
 if __name__ == "__main__":
     typer.run(main)
