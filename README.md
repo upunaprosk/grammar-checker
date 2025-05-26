@@ -4,6 +4,9 @@
 
 Essay Grammar Checker trained on Russian Error-Annotated Learner English Corpus using SpaCy.
 
+**For the grammar checker model, visit: https://github.com/upunaprosk/grammarticle**
+
+
 ## Training 
 The checker consists of 6 pipelines each trained on specific error types.
 Error Categories used for pipeline mapping:  
